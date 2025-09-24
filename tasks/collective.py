@@ -59,3 +59,27 @@ def all_gather(rank, world_size):
     print(f"Rank {rank}: all_gather result = {recv_list}")
 
     dist.destroy_process_group()
+
+@task("scatter")
+def scatter(rank, world_size):
+    dist.init_process_group("gloo", rank=rank, world_size=world_size)
+    group = dist.new_group(list(range(world_size)))
+    tensor_size = 2
+    recv_tensor = torch.zeros(tensor_size, dtype=torch.long)
+
+    if rank == 0:
+        scatter_list = [
+            torch.tensor([0, 0], dtype=torch.long),
+            torch.tensor([1, 1], dtype=torch.long),
+            torch.tensor([2, 2], dtype=torch.long),
+        ]
+    else:
+        scatter_list = []
+
+    print(f"Rank {rank}: scatter list : {scatter_list if rank == 0 else '[]'}")
+    print(f"Rank {rank}: tensor before scatter = {recv_tensor}")
+    
+    dist.scatter(recv_tensor, scatter_list=scatter_list, src=0, group=group)
+    print(f"Rank {rank}: scatter result = {recv_tensor}")
+
+    dist.destroy_process_group()
