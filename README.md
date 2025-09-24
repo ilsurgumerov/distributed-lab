@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # distributed-lab
 
 Лаборатория для демонстрации p2p и collective-операций в torch.distributed.
@@ -16,3 +17,6 @@ docker compose down
 ```bash
 docker compose up --build
 ```
+=======
+# distributed-lab
+>>>>>>> 6bc4e708c2dac24d74c6d69c2139c6ebafabac81
